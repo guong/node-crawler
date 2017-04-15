@@ -24,8 +24,26 @@ function filterSEX(html) {
 
     return sexData;
 }
+function wsMD(data) {
+    // fs.writeFile(filename,data,[options],callback);
+    var mdData = '# Nodejs 爬蟲\n\n';
 
-function writeMD(data) {
+    var ws = fs.createWriteStream(__dirname + '/test.md');
+
+    ws.write(new Buffer(mdData, 'utf-8'));
+
+    data.forEach(function(currentValue, index, array) {
+        mdData = ('[![' + currentValue.sexTitle + '](' + currentValue.sexBanner + ')](' + currentValue.sexUrl + ')' + '\n');
+        ws.write(new Buffer(mdData, 'utf-8'));
+        console.log("正在写入");
+    });
+
+    ws.end(function() {
+        console.log("写入完成");
+    });
+
+}
+function wfMD(data) {
     // fs.writeFile(filename,data,[options],callback);
     var mdData = '# Nodejs 爬蟲\n\n';
     data.forEach(function(currentValue, index, array) {
@@ -52,7 +70,7 @@ https.get(url, function(res) {
 
     res.on('end', function() {
         data = filterSEX(html);
-        writeMD(data);
+        wsMD(data);
 
     });
 }).on('error', function(err) {
